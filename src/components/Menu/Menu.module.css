@@ -1,0 +1,29 @@
+/* Small Screen */
+.menu__list {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.menu__item {
+    margin-bottom: 1rem;
+}
+
+/* Medium Screen */
+@media (min-width: 768px) {
+    .menu__list {
+        flex-direction: row;
+    }
+
+    .menu__item {
+        margin: 0 1rem;
+    }
+}
+
+/* Large Screen */
+@media (min-width: 992px) {
+    /* 
+   * Nothing TODO HERE.
+   * We haven't styling Menu.
+   */
+}

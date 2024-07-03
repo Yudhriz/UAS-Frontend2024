@@ -1,0 +1,48 @@
+/* Small Screen */
+.container {
+    background-color: #AFAAB9;
+    color: #fff;
+    padding: 1rem;
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer__title {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+}
+
+.footer__author {
+    margin-bottom: 1rem;
+}
+
+/* Medium Screen */
+@media (min-width: 768px) {
+    .footer {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer__title {
+        margin: 0;
+        margin-left: 1rem;
+    }
+
+    .footer__author {
+        margin: 0;
+        margin-bottom: 1rem;
+        margin-left: 1rem;
+    }
+}
+
+/* Large Screen */
+@media (min-width: 992px) {
+    /*
+   * Nothing TODO here.
+   * We dont change styling footer. 
+   */
+}
