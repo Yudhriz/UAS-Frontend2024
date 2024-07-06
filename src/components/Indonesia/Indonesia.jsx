@@ -3,13 +3,14 @@ import Card from "../Card/Card";
 import StyledIndonesia from "./Indonesia.styled";
 import axios from "axios";
 import Heading from "../ui/Heading/Heading";
+import endpoint from "../../utils/constants/endpoint";
 
 function Indonesia() {
   const [indonesia, setIndonesia] = useState([]);
 
   useEffect(() => {
     async function fetchDataCovidIndonesia() {
-      const URL = "https://covid-fe-2023.vercel.app/api/indonesia.json";
+      const URL = endpoint.indonesia;
       const response = await axios(URL);
       const data = response.data.indonesia;
 

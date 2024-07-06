@@ -3,13 +3,14 @@ import Card from "../Card/Card";
 import StyledGlobal from "./Global.styled";
 import axios from "axios";
 import Heading from "../ui/Heading/Heading";
+import endpoint from "../../utils/constants/endpoint";
 
 function Global() {
   const [global, setGlobal] = useState([]);
 
   useEffect(() => {
     async function fetchDataCovidGlobal() {
-      const URL = "https://covid-fe-2023.vercel.app/api/global.json";
+      const URL = endpoint.global;
       const response = await axios(URL);
       const data = response.data.global;
 
