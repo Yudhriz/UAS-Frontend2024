@@ -3,13 +3,14 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaVirus, FaHeartbeat, FaSkullCrossbones } from "react-icons/fa";
 import Heading from "../ui/Heading/Heading";
+import endpoint from "../../utils/constants/endpoint";
 
 function Region() {
   const [regions, setRegions] = useState([]);
 
   useEffect(() => {
     async function fetchDataCovidRegion() {
-      const URL = "https://covid-fe-2023.vercel.app/api/global.json";
+      const URL = endpoint.global;
       const response = await axios(URL);
       const data = response.data.regions;
 
@@ -37,7 +38,7 @@ function Region() {
           {regions.map((region) => (
             <div key={region.name} className='card'>
               <div className='card__body'>
-                <h2 className='card__title'>{region.name}</h2>
+                <Heading as='h2' className='card__title'>{region.name}</Heading>
                 <div className='card__description confirmed'>
                   <span className='card__value'>
                     Confirmed : {formatValue(region.numbers.confirmed)}
