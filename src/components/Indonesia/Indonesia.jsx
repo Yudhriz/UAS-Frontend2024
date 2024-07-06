@@ -1,26 +1,41 @@
+import { useState, useEffect } from "react";
 import Card from "../Card/Card";
-import styles from "./Indonesia.module.css";
-import data from "../../utils/constants/indonesia";
+import StyledIndonesia from "./Indonesia.styled";
+import axios from "axios";
+import Heading from "../ui/Heading/Heading";
 
 function Indonesia() {
-  const { indonesia } = data;
+  const [indonesia, setIndonesia] = useState([]);
+
+  useEffect(() => {
+    async function fetchDataCovidIndonesia() {
+      const URL = "https://covid-fe-2023.vercel.app/api/indonesia.json";
+      const response = await axios(URL);
+      const data = response.data.indonesia;
+
+      setIndonesia(data);
+    }
+    fetchDataCovidIndonesia();
+  }, []);
 
   return (
-    <div className={styles.container}>
-      <section className={styles.indonesia}>
+    <StyledIndonesia>
+      <section>
         <div>
-          <h2 className={styles.indonesia__title}>Indonesia</h2>
-          <h3 className={styles.indonesia__subtitle}>
-            Data Covid Berdasarkan Indonesia
-          </h3>
+          <Heading as='h2'>Indonesia Situation</Heading>
+          <Heading as='h3'>Data Covid Berdasarkan Indonesia</Heading>
         </div>
-        <div className={styles.card__container}>
-          {indonesia.map((indonesian) => {
-            return <Card key={indonesian.status} title={indonesian.status} value={indonesian.total} />;
-          })}
+        <div className='card__container'>
+          {indonesia.map((indonesian) => (
+            <Card
+              key={indonesian.status}
+              title={indonesian.status}
+              value={indonesian.total}
+            />
+          ))}
         </div>
       </section>
-    </div>
+    </StyledIndonesia>
   );
 }
 

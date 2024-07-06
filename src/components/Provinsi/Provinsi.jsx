@@ -1,21 +1,26 @@
-import styles from "./Provinsi.module.css";
-// import data from "../../utils/constants/provinces";
-// import { useState } from "react"; // Sudah tidak diperlukan
+import StyledProvinsi from "./Provinsi.styled";
+import { useContext } from "react";
+import ProvinsiContext from "../context/ProvinsiContext";
+import Heading from "../ui/Heading/Heading";
 
 function Provinsi(props) {
-  const { provinces } = props;
+  const { title = "Provinsi" } = props;
+  const { provinces } = useContext(ProvinsiContext);
+
+  // Function to format numbers
+  function formatNumber(number) {
+    return number.toLocaleString("id-ID");
+  }
 
   return (
-    <div className={styles.container}>
-      <section className={styles.provinsi}>
+    <StyledProvinsi>
+      <section>
         <div>
-          <h2 className={styles.provinsi__title}>Provinsi</h2>
-          <h3 className={styles.provinsi__subtitle}>
-            Data Covid Berdasarkan Provinsi
-          </h3>
+          <Heading as='h2'>{title}</Heading>
+          <Heading as='h3'>Data Covid Berdasarkan Provinsi</Heading>
         </div>
-        <div className={styles.table__container}>
-          <table className={styles.table}>
+        <div className='table__container'>
+          <table>
             <thead>
               <tr>
                 <th>No</th>
@@ -30,18 +35,34 @@ function Provinsi(props) {
               {provinces.map((provinsi, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{provinsi.kota}</td>
-                  <td>{provinsi.kasus}</td>
-                  <td>{provinsi.sembuh}</td>
-                  <td>{provinsi.dirawat}</td>
-                  <td>{provinsi.meninggal}</td>
+                  <td>{provinsi.name || provinsi.kota}</td>
+                  <td>
+                    {formatNumber(
+                      provinsi.numbers?.confirmed || provinsi.kasus
+                    )}
+                  </td>
+                  <td>
+                    {formatNumber(
+                      provinsi.numbers?.recovered || provinsi.sembuh
+                    )}
+                  </td>
+                  <td>
+                    {formatNumber(
+                      provinsi.numbers?.treatment || provinsi.dirawat
+                    )}
+                  </td>
+                  <td>
+                    {formatNumber(
+                      provinsi.numbers?.death || provinsi.meninggal
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       </section>
-    </div>
+    </StyledProvinsi>
   );
 }
 

@@ -1,10 +1,10 @@
-import styles from "../FormCovid/FormCovid.module.css";
+import StyledAlert from "./Alert.styled";
 
 function Alert(props) {
   return (
-    <div>
-      <p className={styles.form__error}>{props.children}</p>
-    </div>
+    <StyledAlert>
+      <p className='form__error'>{props.children}</p>
+    </StyledAlert>
   );
 }
 

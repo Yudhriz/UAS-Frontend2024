@@ -1,18 +1,19 @@
 import Menu from "../Menu/Menu";
-import styles from "./Navbar.module.css";
+import Heading from "../ui/Heading/Heading";
+import StyledNavbar from "./Navbar.styled";
 
 function Navbar() {
   return (
-    <div className={styles.container}>
-      <nav className={styles.navbar}>
+    <StyledNavbar>
+      <nav>
         <div>
-          <h1 className={styles.navbar__brand}>Covid ID</h1>
+          <Heading as='h1'>Covid ID</Heading>
         </div>
         <div>
           <Menu />
         </div>
       </nav>
-    </div>
+    </StyledNavbar>
   );
 }
 

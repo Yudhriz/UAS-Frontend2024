@@ -1,26 +1,34 @@
-import styles from "./Card.module.css";
+import Heading from "../ui/Heading/Heading";
+import StyledCard from "./Card.styled";
 
 function Card(props) {
   const { title, value } = props;
 
-  const formatValue = (value) => {
-    // Check if the value is a number or can be converted to a number
-    const num = Number(value);
-    if (!isNaN(num)) {
-      return num.toLocaleString("id-ID"); // 'id-ID' uses dot (.) as thousands separator
+  const format = (input, type) => {
+    if (type === "value") {
+      const num = Number(input);
+      if (!isNaN(num)) {
+        return num.toLocaleString("id-ID");
+      }
+      return input;
+    } else if (type === "title") {
+      return input
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
     }
-    return value; // Return the original value if it's not a number
   };
 
   return (
-    <div className={styles.container}>
-      <section className={styles.card}>
-        <div className={styles.card__body}>
-          <h2 className={styles.card__title}>{title}</h2>
-          <p className={styles.card__value}>{formatValue(value)}</p>
+    <StyledCard>
+      <section>
+        <div className='card__body'>
+          <Heading as='h2'>{format(title, "title")}</Heading>
+          <p>{format(value, "value")}</p>
         </div>
       </section>
-    </div>
+    </StyledCard>
   );
 }
 

@@ -1,46 +1,71 @@
 import Alert from "../Alert/Alert";
-import Button from "../Button/Button";
-import styles from "./FormCovid.module.css";
-// import data from "../../utils/constants/provinces"; // Sudah tidak diperlukan
+import Button from "../ui/Button/Button";
 import ImageForm from "./assets/img/undraw_doctors_p6aq.svg";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import StyledForm from "./FormCovid.styled";
+import ProvinsiContext from "../context/ProvinsiContext";
+import Heading from "../ui/Heading/Heading";
 
-function FormCovid(props) {
-  const { provinces, setProvinces } = props;
+function FormCovid() {
+  const { provinces, setProvinces } = useContext(ProvinsiContext);
 
-  const [provinsi, setProvinsi] = useState("");
-  const [status, setStatus] = useState("");
-  const [jumlah, setJumlah] = useState("");
+  // Form data state
+  const [formData, setFormData] = useState({
+    provinsi: "",
+    status: "",
+    jumlah: "",
+  });
 
-  const [isProvinsiEmpty, setIsProvinsiEmpty] = useState(false);
-  const [isStatusEmpty, setIsStatusEmpty] = useState(false);
-  const [isJumlahEmpty, setIsJumlahEmpty] = useState(false);
+  // Form error state
+  const [formError, setFormError] = useState({
+    provinsi: false,
+    status: false,
+    jumlah: false,
+  });
 
-  function handleProvinsi(e) {
-    setProvinsi(e.target.value);
+  // Handle change event
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setFormError({
+      ...formError,
+      [name]: false,
+    });
   }
 
-  function handleStatus(e) {
-    setStatus(e.target.value);
+  // Destructuring formData and formError
+  const { provinsi, status, jumlah } = formData;
+  const {
+    provinsi: isProvinsiEmpty,
+    status: isStatusEmpty,
+    jumlah: isJumlahEmpty,
+  } = formError;
+
+  // Form validation
+  function validateForm() {
+    // Membuat object errors yang berisi key dan value
+    const errors = {
+      provinsi: provinsi === "",
+      status: status === "",
+      jumlah: jumlah === "" || isNaN(jumlah),
+    };
+
+    // Mengubah state formError dengan errors
+    setFormError(errors);
+
+    // mengembalikan nilai true jika tidak ada error
+    return !Object.values(errors).includes(true);
   }
 
-  function handleJumlah(e) {
-    setJumlah(e.target.value);
-  }
-
+  // Handle submit event
   function handleSubmit(e) {
     e.preventDefault();
 
-    const provinsiIsEmpty = provinsi === "";
-    const statusIsEmpty = status === "";
-    const jumlahIsEmpty = jumlah === "";
-
-    setIsProvinsiEmpty(provinsiIsEmpty);
-    setIsStatusEmpty(statusIsEmpty);
-    setIsJumlahEmpty(jumlahIsEmpty);
-
-    if (!provinsiIsEmpty && !statusIsEmpty && !jumlahIsEmpty) {
-      const province = provinces.map((prov) => {
+    if (validateForm()) {
+      const updatedProvinces = provinces.map((prov) => {
         if (prov.kota === provinsi) {
           return {
             ...prov,
@@ -64,32 +89,43 @@ function FormCovid(props) {
         }
         return prov;
       });
-      setProvinces(province);
+
+      setProvinces(updatedProvinces);
+      resetForm();
     }
   }
 
+  // Reset form
+  function resetForm() {
+    // Mengubah state formData dan formError menjadi default
+    setFormData({
+      provinsi: "",
+      status: "",
+      jumlah: "",
+    });
+    setFormError({
+      provinsi: false,
+      status: false,
+      jumlah: false,
+    });
+  }
+
   return (
-    <div className={styles.container}>
-      <section className={styles.form}>
-        <div className={styles.form__left}>
-          <img
-            className={styles.form__image}
-            src={ImageForm}
-            alt='placeholder'
-          />
+    <StyledForm>
+      <section>
+        <div className='form__left'>
+          <img src={ImageForm} alt='placeholder' />
         </div>
-        <div className={styles.form__right}>
-          <h2 className={styles.form__title}>Form Covid</h2>
-          <form onSubmit={handleSubmit} className={styles.form__container}>
-            <label className={styles.form__label} htmlFor='provinsi'>
-              Provinsi
-            </label>
+        <div className='form__right'>
+          <Heading as='h2'>Form Covid</Heading>
+          <form onSubmit={handleSubmit}>
+            <label htmlFor='provinsi'>Provinsi</label>
             <select
-              className={styles.form__input}
+              className='form__input'
               name='provinsi'
               id='provinsi'
               value={provinsi}
-              onChange={handleProvinsi}
+              onChange={handleChange}
             >
               <option value='' hidden>
                 Pilih Provinsi
@@ -101,15 +137,13 @@ function FormCovid(props) {
               ))}
             </select>
             {isProvinsiEmpty && <Alert>Provinsi Wajib Diisi</Alert>}
-            <label className={styles.form__label} htmlFor='status'>
-              Status
-            </label>
+            <label htmlFor='status'>Status</label>
             <select
-              value={status}
-              onChange={handleStatus}
-              className={styles.form__input}
+              className='form__input'
               name='status'
               id='status'
+              value={status}
+              onChange={handleChange}
             >
               <option value='' hidden>
                 Pilih Status
@@ -120,21 +154,22 @@ function FormCovid(props) {
               <option value='meninggal'>Meninggal</option>
             </select>
             {isStatusEmpty && <Alert>Status Wajib Diisi</Alert>}
-            <label className={styles.form__label} htmlFor='jumlah'>
-              Jumlah
-            </label>
+            <label htmlFor='jumlah'>Jumlah</label>
             <input
-              className={styles.form__input}
-              value={jumlah}
-              onChange={handleJumlah}
+              className='form__input'
               type='number'
+              name='jumlah'
+              id='jumlah'
+              value={jumlah}
+              onChange={handleChange}
             />
             {isJumlahEmpty && <Alert>Jumlah Wajib Diisi</Alert>}
-            <Button title='Submit' />
+            <Button type='submit'>Submit</Button>
           </form>
         </div>
       </section>
-    </div>
+    </StyledForm>
   );
 }
+
 export default FormCovid;
